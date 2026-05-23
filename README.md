@@ -40,6 +40,8 @@ echo "LED chip found on i2c-$BUS"
 modprobe i2c-dev 2>/dev/null
 sleep 1
 
+
+
 i2cset -y $BUS 0x26 0x52 0x00
 i2cset -y $BUS 0x26 0x54 0x00
 i2cset -y $BUS 0x26 0x56 0x00
