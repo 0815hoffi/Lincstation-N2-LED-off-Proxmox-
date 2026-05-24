@@ -11,7 +11,7 @@ _____________________________
 apt install i2c-tools -y
 
 2:
-
+```
 cat > /usr/local/bin/lincled.sh << 'EOF'
 #!/bin/bash
 
@@ -40,8 +40,7 @@ echo "LED chip found on i2c-$BUS"
 modprobe i2c-dev 2>/dev/null
 sleep 1
 
-
-
+# Disable blinking (all 6 bays)
 i2cset -y $BUS 0x26 0x52 0x00
 i2cset -y $BUS 0x26 0x54 0x00
 i2cset -y $BUS 0x26 0x56 0x00
@@ -49,42 +48,51 @@ i2cset -y $BUS 0x26 0x58 0x00
 i2cset -y $BUS 0x26 0x5A 0x00
 i2cset -y $BUS 0x26 0x5C 0x00
 i2cset -y $BUS 0x26 0x5E 0x00
+
+# Network 
 i2cset -y $BUS 0x26 0x56 0x00
 i2cset -y $BUS 0x26 0XB0 0x40
 i2cset -y $BUS 0x26 0XB0 0x80
 
+# SATA 1
 i2cset -y $BUS 0x26 0xB0 0x04 # white off
 i2cset -y $BUS 0x26 0xB0 0x08 # red off 
 i2cset -y $BUS 0x26 0x52 0x00 # blinking off
 
+# SATA 2
 i2cset -y $BUS 0x26 0xB0 0x10 # white off
 i2cset -y $BUS 0x26 0xB0 0x20 # red off 
 i2cset -y $BUS 0x26 0x54 0x00 # blinking off
 
+# NVMe 1
 i2cset -y $BUS 0x26 0xB1 0x01 # white off
 i2cset -y $BUS 0x26 0xB1 0x02 # red off 
 i2cset -y $BUS 0x26 0x58 0x00 # blinking off
 
-
+# NVMe 2
 i2cset -y $BUS 0x26 0xB1 0x04 # white off
 i2cset -y $BUS 0x26 0xB1 0x08 # red off
 i2cset -y $BUS 0x26 0x5A 0x00 # blinking off
 
+# NVMe 3
 i2cset -y $BUS 0x26 0xB1 0x10 # white off
 i2cset -y $BUS 0x26 0xB1 0x20 # red off
 i2cset -y $BUS 0x26 0x5C 0x00 # blinking off
 
+# NVMe 4
 i2cset -y $BUS 0x26 0xB1 0x40 # white off
 i2cset -y $BUS 0x26 0xB1 0x80 # red off
 i2cset -y $BUS 0x26 0x5E 0x00 # blinking off
-
+-
 echo "SUCCESS: All Leds OFF (bus $BUS)"
 EOF
+```
 
 3:
 chmod +x /usr/local/bin/lincled.sh
 
-5:
+4:
+```
 cat > /etc/systemd/system/lled.service << 'EOF'
 [Unit]
 Description=LincLEC
@@ -98,10 +106,15 @@ ExecStart=/usr/local/bin/lincled.sh
 [Install]
 WantedBy=multi-user.target
 EOF
+```
 
-6:
-systemctl daemon-reload
-systemctl start lled
-systemctl status lled
-systemctl enable lled
-systemctl status lled
+5:
+#systemctl daemon-reload
+
+#systemctl start lled
+
+#systemctl status lled
+
+#systemctl enable lled
+
+#systemctl status lled
