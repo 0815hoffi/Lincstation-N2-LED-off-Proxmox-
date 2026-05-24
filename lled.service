@@ -1,0 +1,11 @@
+[Unit]
+Description=LincLEC
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/lincled.sh
+
+[Install]
+WantedBy=multi-user.target
